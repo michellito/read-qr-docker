@@ -3,6 +3,7 @@ FROM python:3.8
 
 # copy the dependencies file to the working directory
 COPY . .
+COPY transfer.py ./transfer.py
 
 # install dependencies
 RUN pip install -r requirements.txt
