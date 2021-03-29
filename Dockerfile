@@ -1,11 +1,10 @@
-# set base image (host OS)
-FROM python:3.8
+FROM python:3
 
-# copy the dependencies file to the working directory
-COPY requirements.txt .
-COPY transfer.py .
+WORKDIR /usr/src/app
 
-# install dependencies
-RUN pip install -r requirements.txt
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["python3", "transfer.py"]
+COPY . .
+
+ENTRYPOINT [ "python", "./transfer.py" ]
