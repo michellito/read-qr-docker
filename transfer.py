@@ -32,5 +32,5 @@ data = {
 
 with open("ReadsPerGene.out.tab", "rb") as a_file:
     file_dict = {args.rename: a_file}
-    response = requests.post(args.url, files=file_dict, data=data)
+    response = requests.post('https://' + args.url, files=file_dict, data=data)
     print(response)
