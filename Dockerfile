@@ -7,4 +7,4 @@ ENV BINPATH /usr/bin
 ADD transfer.py $BINPATH
 RUN chmod +x $BINPATH/transfer.py
 
-ENTRYPOINT [ "python", "transfer.py" ]
+ENTRYPOINT [ "transfer.py" ]
