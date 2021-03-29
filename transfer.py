@@ -17,6 +17,10 @@ parser.add_argument('--rename',
                        type=str,
                        help='descriptive name for file')
 
+parser.add_argument('--url',
+                       type=str,
+                       help='POST url endpoint')
+
 
 args = parser.parse_args()
 print(args)
@@ -28,5 +32,5 @@ data = {
 
 with open("ReadsPerGene.out.tab", "rb") as a_file:
     file_dict = {args.rename: a_file}
-    response = requests.post("https://09256ccea3d5.ngrok.io/api/file-transfer/", files=file_dict, data=data)
+    response = requests.post(args.url, files=file_dict, data=data)
     print(response)
