@@ -36,5 +36,5 @@ data = {
 
 with open(args.file, "rb") as a_file:
     file_dict = {args.rename: a_file}
-    response = requests.post('https://demeter.pharmacy.arizona.edu/api/file-transfer/', files=file_dict, data=data)
+    response = requests.post('http://demeter.pharmacy.arizona.edu/api/file-transfer/', files=file_dict, data=data)
     print(response)
