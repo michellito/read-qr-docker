@@ -21,9 +21,9 @@ parser.add_argument('--rename',
                        type=str,
                        help='descriptive name for file')
 
-# parser.add_argument('--url',
-#                        type=str,
-#                        help='POST url endpoint')
+parser.add_argument('--token',
+                       type=str,
+                       help='POST url endpoint')
 
 
 args = parser.parse_args()
@@ -31,10 +31,11 @@ print(args)
 
 data = {
     'rename': args.rename,
-    'path': args.path
+    'path': args.path,
+    'token': args.token
 }
 
 with open(args.file, "rb") as a_file:
     file_dict = {args.rename: a_file}
-    response = requests.post('https://demeter.pharmacy.arizona.edu/api/file-transfer/', files=file_dict, data=data)
-    print(response)
+    response = requests.post('https://b5143783ea53.ngrok.io/api/file-transfer/', files=file_dict, data=data)
+    print(str(response.text))
