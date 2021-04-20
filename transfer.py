@@ -37,5 +37,5 @@ data = {
 
 with open(args.file, "rb") as a_file:
     file_dict = {args.rename: a_file}
-    response = requests.post('https://b5143783ea53.ngrok.io/api/file-transfer/', files=file_dict, data=data)
+    response = requests.post('https://demeter.pharmacy.arizona.edu/api/file-transfer/', files=file_dict, data=data)
     print(str(response.text))
