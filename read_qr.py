@@ -41,21 +41,10 @@ parser.add_argument('--model',
                        type=str,
                        help='model file')
 
-parser.add_argument('--val',
-                       type=str,
-                       help='path to validation dataset')
-
-parser.add_argument('--labels',
-                       type=str,
-                       help='path to validation labels')
 
 
 args = parser.parse_args()
 print(args)
-
-register_coco_instances("my_dataset_val", {}, args.labels, args.val)
-qr_metadata = MetadataCatalog.get("my_dataset_val")
-print(qr_metadata)
 
 cfg = get_cfg()
 cfg.MODEL.DEVICE='cpu'
@@ -67,28 +56,16 @@ cfg.SOLVER.IMS_PER_BATCH = 2
 cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
 cfg.SOLVER.MAX_ITER = 1000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
 cfg.SOLVER.STEPS = []        # do not decay learning rate
-# cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
-cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
-# NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
-
-os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (qrcode). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
 cfg.MODEL.WEIGHTS = args.model  # path to the model we just trained
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7   # set a custom testing threshold
+
+os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 predictor = DefaultPredictor(cfg)
 
 # test image
 im = cv2.imread(args.file)
 outputs = predictor(im)  # format is documented at https://detectron2.readthedocs.io/tutorials/models.html#model-output-format
-
-# v = Visualizer(im[:, :, ::-1],
-#   metadata=qr_metadata, 
-#   scale=0.5, 
-#   instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
-# )
-
-# out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-# cv2.imshow('out', out.get_image()[:, :, ::-1])
 
 pred_boxes = outputs["instances"].pred_boxes
 
@@ -103,7 +80,6 @@ for bbox in pred_boxes:
   y1 = round(bbox[3].item())
 
   crop_img = im[ y0:y1, x0:x1]
-#   cv2_imshow(crop_img)
 
   # zbar
   results = decode(crop_img, symbols=[ZBarSymbol.QRCODE])
