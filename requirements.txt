@@ -1,2 +1,4 @@
 requests
 pyyaml==5.1
+opencv-python
+pyzbar
